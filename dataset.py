@@ -11,10 +11,10 @@ from torchvision.transforms.functional import resize, to_pil_image  # type: igno
 from scipy.ndimage.morphology import binary_dilation
 import skimage.morphology, skimage.measure
 
-class weak_class_dataset(torch.utils.data.Dataset):
-    def __init__(self, args, split, sup=False, data_name='CoNSeP'):
+class Dataset_siwoo(torch.utils.data.Dataset):
+    def __init__(self, args, split):
         self.args = args
-        self.root_dir = os.path.expanduser(self.args.data_path)  # /media/NAS/nas_187/PATHOLOGY_DATA/MoNuSeg
+        self.root_dir = os.path.expanduser(self.args.data_dir)  # /media/NAS/nas_187/PATHOLOGY_DATA/MoNuSeg
         self.split = split
 
         from datasets.get_transforms_ssl import get_transforms
@@ -52,6 +52,20 @@ class weak_class_dataset(torch.utils.data.Dataset):
         print('{} dataset {} loaded'.format(self.split, self.num_samples))
 
     def read_samples(self, root_dir, split):
+        '''
+        /path/to/imagenet/
+          train/
+            class1/
+              img1.jpeg
+            class2/
+              img2.jpeg
+          val/
+            class1/
+              img3.jpeg
+            class/2
+              img4.jpeg
+        :return: coordinates (x, y)??
+        '''
         # if split == 'train':
         #     samples = os.listdir(os.path.join(root_dir, 'images', split))
         #
