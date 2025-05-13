@@ -64,7 +64,7 @@ def main(args):
 
 
     best_val_acc = 0.0
-    best_model_path = os.path.join(CKPT_PATH, f'best_Mean_IOU_{best_val_acc:.4f}_model.pth')
+    best_model_path = os.path.join(args.ckpt_path, f'best_Mean_IOU_{best_val_acc:.4f}_model.pth')
 
     for epoch in range(args.num_epoch):
         # Training loop
@@ -218,7 +218,7 @@ if __name__ == "__main__":
 
 
     args.ckpt_path = os.path.join(args.save_dir, 'checkpoints')
-    args.result_path = os.path.join(save_dir, 'results')
+    args.result_path = os.path.join(args.save_dir, 'results')
 
     os.makedirs(args.ckpt_path, exist_ok=True)
     os.makedirs(args.result_path, exist_ok=True)

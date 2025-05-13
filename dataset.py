@@ -17,8 +17,6 @@ class Dataset_siwoo(torch.utils.data.Dataset):
         self.root_dir = os.path.expanduser(self.args.data_dir)  # /media/NAS/nas_187/PATHOLOGY_DATA/MoNuSeg
         self.split = split
 
-        from datasets.get_transforms_ssl import get_transforms
-
         # self.mean = np.array([123.675, 116.28, 103.53])
         # self.std = np.array([58.395, 57.12, 57.375])
 
@@ -28,7 +26,7 @@ class Dataset_siwoo(torch.utils.data.Dataset):
 
         # create image augmentation
         if self.split == 'train':
-            self.transform = get_transforms({
+            self.transform = get_transforms({ #without color aug
                 'random_resize': [0.8, 1.25],
                 'horizontal_flip': True,
                 'random_affine': 0.3,
@@ -64,7 +62,7 @@ class Dataset_siwoo(torch.utils.data.Dataset):
               img3.jpeg
             class/2
               img4.jpeg
-        :return: coordinates (x, y)??
+        :return: num_classes (0 ~ 999)
         '''
         # if split == 'train':
         #     samples = os.listdir(os.path.join(root_dir, 'images', split))

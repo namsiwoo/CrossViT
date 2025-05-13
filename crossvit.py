@@ -74,8 +74,6 @@ class MultiScaleTransformerEncoder(nn.Module):
 
 
 
-
-
 class CrossViT(nn.Module):
     def __init__(self, image_size, channels, num_classes, patch_size_small = 14, patch_size_large = 16, small_dim = 96,
                  large_dim = 192, small_depth = 1, large_depth = 4, cross_attn_depth = 1, multi_scale_enc_depth = 3,
@@ -135,9 +133,10 @@ class CrossViT(nn.Module):
         )
 
 
-    def forward(self, img):
+    def forward(self, img1, img2):
 
-        xs = self.to_patch_embedding_small(img)
+        xs = self.to_patch_embedding_small(img1)
+        # print(xs.shape) -> (16, 16, 784)
         b, n, _ = xs.shape
 
         cls_token_small = repeat(self.cls_token_small, '() n d -> b n d', b = b)
@@ -145,7 +144,7 @@ class CrossViT(nn.Module):
         xs += self.pos_embedding_small[:, :(n + 1)]
         xs = self.dropout_small(xs)
 
-        xl = self.to_patch_embedding_large(img)
+        xl = self.to_patch_embedding_large(img2)
         b, n, _ = xl.shape
 
         cls_token_large = repeat(self.cls_token_large, '() n d -> b n d', b=b)
@@ -163,7 +162,7 @@ class CrossViT(nn.Module):
         xl = self.mlp_head_large(xl)
         x = xs + xl
         return x
-    
+
     
     
 
@@ -179,6 +178,6 @@ if __name__ == "__main__":
     
     out = model(img)
     
-    print("Shape of out :", out.shape)      # [B, num_classes]
+    print("Shape of out :", out.shape)      # [B, num_classes] -> 1, 1000
 
     
